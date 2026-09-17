@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Асан & Батма | Тойго чакыруу</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================
+   НЕГИЗГИ ЖӨНДӨӨЛӨР
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background: #f7f2f7;
+    color: #493d50;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+    font-family: "Cormorant Garamond", serif;
+}
+
+section {
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* =========================
+   КОНВЕРТ
+========================= */
+
+#envelopeScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #d9c8dc 0%,
+            #b9a4bf 45%,
+            #89758f 100%
+        );
+
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+#envelopeScreen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.envelope-wrapper {
+    text-align: center;
+    width: 90%;
+    max-width: 430px;
+}
+
+.envelope-title {
+    color: white;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 32px;
+    margin-bottom: 35px;
+    letter-spacing: 2px;
+}
+
+.envelope {
+    width: 330px;
+    height: 220px;
+    margin: auto;
+    position: relative;
+    cursor: pointer;
+    perspective: 1000px;
+    filter: drop-shadow(0 25px 30px rgba(40, 25, 45, .25));
+}
+
+.envelope-back {
+    position: absolute;
+    inset: 0;
+
+    background: #eee4ef;
+
+    border-radius: 5px;
+}
+
+.envelope-left,
+.envelope-right,
+.envelope-bottom {
+    position: absolute;
+    z-index: 3;
+}
+
+.envelope-left {
+    left: 0;
+    bottom: 0;
+
+    width: 0;
+    height: 0;
+
+    border-top: 110px solid transparent;
+    border-bottom: 110px solid transparent;
+    border-left: 165px solid #d8c5da;
+}
+
+.envelope-right {
+    right: 0;
+    bottom: 0;
+
+    width: 0;
+    height: 0;
+
+    border-top: 110px solid transparent;
+    border-bottom: 110px solid transparent;
+    border-right: 165px solid #d0bad3;
+}
+
+.envelope-bottom {
+    left: 0;
+    bottom: 0;
+
+    width: 0;
+    height: 0;
+
+    border-left: 165px solid transparent;
+    border-right: 165px solid transparent;
+    border-bottom: 125px solid #e8dce9;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 0;
+    height: 0;
+
+    border-left: 165px solid transparent;
+    border-right: 165px solid transparent;
+    border-top: 125px solid #c9b1ce;
+
+    transform-origin: top;
+    transition: transform 1s ease;
+    z-index: 5;
+}
+
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.seal {
+    position: absolute;
+
+    left: 50%;
+    top: 52%;
+
+    transform: translate(-50%, -50%);
+
+    width: 62px;
+    height: 62px;
+
+    border-radius: 50%;
+
+    background: #b59a64;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 25px;
+
+    z-index: 10;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.2),
+        inset 0 0 0 3px rgba(255,255,255,.25);
+}
+
+.open-text {
+    margin-top: 30px;
+
+    color: white;
+
+    font-size: 13px;
+    letter-spacing: 3px;
+
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,100% {
+        opacity: .5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================
+   МУЗЫКА
+========================= */
+
+.music-button {
+    position: fixed;
+
+    right: 20px;
+    top: 20px;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.5);
+
+    background: rgba(110, 86, 118, .75);
+
+    backdrop-filter: blur(10px);
+
+    color: white;
+
+    z-index: 500;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            rgba(47, 32, 52, .38),
+            rgba(47, 32, 52, .55)
+        ),
+        url("assets/photo1.jpg") center/cover;
+
+    padding: 40px 20px;
+}
+
+.hero-content {
+    max-width: 800px;
+
+    animation: fadeUp 1.5s ease;
+}
+
+.small-title {
+    font-size: 14px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(65px, 14vw, 135px);
+
+    font-weight: 500;
+
+    line-height: .8;
+
+    letter-spacing: 5px;
+}
+
+.hero-and {
+    font-size: 35px;
+
+    font-family: "Cormorant Garamond", serif;
+
+    margin: 25px 0;
+}
+
+.hero-date {
+    margin-top: 35px;
+
+    font-size: 15px;
+
+    letter-spacing: 4px;
+}
+
+.gold-line {
+    width: 100px;
+    height: 1px;
+
+    background: #e2cf9a;
+
+    margin: 25px auto;
+}
+
+
+/* =========================
+   INTRO
+========================= */
+
+.intro {
+    background: #f8f3f8;
+
+    padding: 100px 20px;
+
+    text-align: center;
+}
+
+.intro-inner {
+    max-width: 750px;
+    margin: auto;
+}
+
+.intro-label {
+    color: #9b82a2;
+
+    font-size: 12px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 25px;
+}
+
+.intro h2 {
+    font-size: 50px;
+
+    font-weight: 500;
+
+    color: #58465e;
+
+    margin-bottom: 25px;
+}
+
+.intro p {
+    font-family: "Cormorant Garamond", serif;
+
+    font-size: 24px;
+
+    line-height: 1.7;
+
+    color: #6d6072;
+}
+
+
+/* =========================
+   БӨЛҮМ
+========================= */
+
+.section-title {
+    text-align: center;
+
+    font-size: 52px;
+
+    font-weight: 500;
+
+    color: #59475f;
+
+    margin-bottom: 50px;
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+.date-section {
+    padding: 100px 20px;
+
+    background: #eae0eb;
+}
+
+.date-card {
+    max-width: 700px;
+
+    margin: auto;
+
+    background: rgba(255,255,255,.6);
+
+    border-radius: 30px;
+
+    padding: 55px 30px;
+
+    text-align: center;
+
+    box-shadow: 0 15px 50px rgba(75,55,80,.1);
+}
+
+.date-number {
+    font-family: "Cormorant Garamond", serif;
+
+    font-size: 110px;
+
+    line-height: .8;
+
+    color: #715878;
+}
+
+.date-month {
+    font-size: 22px;
+
+    letter-spacing: 6px;
+
+    text-transform: uppercase;
+
+    margin-top: 20px;
+
+    color: #846c8a;
+}
+
+.date-year {
+    margin-top: 15px;
+
+    font-family: "Cormorant Garamond", serif;
+
+    font-size: 30px;
+}
+
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+.countdown {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 12px;
+
+    max-width: 650px;
+
+    margin: 50px auto 0;
+}
+
+.count-box {
+    background: rgba(255,255,255,.7);
+
+    border-radius: 15px;
+
+    padding: 20px 10px;
+}
+
+.count-box strong {
+    display: block;
+
+    font-family: "Cormorant Garamond", serif;
+
+    font-size: 38px;
+
+    color: #654f6c;
+}
+
+.count-box span {
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+.photo-section {
+    padding: 100px 20px;
+
+    background: #f8f5f8;
+}
+
+.photo-grid {
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.photo-grid img {
+    width: 100%;
+
+    height: 550px;
+
+    object-fit: cover;
+
+    border-radius: 5px;
+
+    transition: transform .6s ease;
+
+    box-shadow: 0 15px 40px rgba(50,35,55,.12);
+}
+
+.photo-grid img:hover {
+    transform: scale(1.02);
+}
+
+.photo-grid img:nth-child(3) {
+    grid-column: span 2;
+
+    height: 650px;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.info-section {
+    padding: 100px 20px;
+
+    background: #eee6ef;
+}
+
+.info-grid {
+    max-width: 1000px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.info-card {
+    background: rgba(255,255,255,.65);
+
+    padding: 45px 25px;
+
+    text-align: center;
+
+    border-radius: 20px;
+}
+
+.info-icon {
+    font-size: 35px;
+
+    margin-bottom: 20px;
+}
+
+.info-card h3 {
+    font-size: 30px;
+
+    margin-bottom: 15px;
+
+    color: #604d67;
+}
+
+.info-card p {
+    line-height: 1.7;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   РЕСТОРАН
+========================= */
+
+.location {
+    padding: 110px 20px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            rgba(45,34,48,.48),
+            rgba(45,34,48,.58)
+        ),
+        url("assets/photo4.jpg") center/cover;
+
+    color: white;
+}
+
+.location h2 {
+    font-size: 65px;
+
+    font-weight: 500;
+}
+
+.location-name {
+    font-family: "Cormorant Garamond", serif;
+
+    font-size: 32px;
+
+    margin: 20px 0;
+}
+
+.location-time {
+    font-size: 18px;
+
+    letter-spacing: 3px;
+}
+
+.map-button {
+    display: inline-block;
+
+    margin-top: 35px;
+
+    padding: 15px 35px;
+
+    border: 1px solid rgba(255,255,255,.7);
+
+    border-radius: 50px;
+
+    color: white;
+
+    text-decoration: none;
+
+    transition: .3s;
+}
+
+.map-button:hover {
+    background: white;
+
+    color: #59475f;
+}
+
+
+/* =========================
+   FINAL
+========================= */
+
+.final-section {
+    min-height: 90vh;
+
+    padding: 100px 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            rgba(40,30,43,.3),
+            rgba(40,30,43,.55)
+        ),
+        url("assets/photo5.jpg") center/cover;
+
+    color: white;
+}
+
+.final-content {
+    max-width: 700px;
+}
+
+.final-content h2 {
+    font-size: clamp(55px, 10vw, 100px);
+
+    font-weight: 500;
+
+    line-height: .9;
+
+    margin-bottom: 30px;
+}
+
+.final-content p {
+    font-family: "Cormorant Garamond", serif;
+
+    font-size: 27px;
+
+    line-height: 1.6;
+}
+
+.footer {
+    background: #514157;
+
+    color: #eee;
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   АНИМАЦИЯ
+========================= */
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .envelope {
+        width: 290px;
+        height: 195px;
+    }
+
+    .envelope-left {
+        border-top-width: 97px;
+        border-bottom-width: 97px;
+        border-left-width: 145px;
+    }
+
+    .envelope-right {
+        border-top-width: 97px;
+        border-bottom-width: 97px;
+        border-right-width: 145px;
+    }
+
+    .envelope-bottom {
+        border-left-width: 145px;
+        border-right-width: 145px;
+        border-bottom-width: 110px;
+    }
+
+    .envelope-flap {
+        border-left-width: 145px;
+        border-right-width: 145px;
+        border-top-width: 110px;
+    }
+
+    .hero {
+        min-height: 100svh;
+    }
+
+    .hero h1 {
+        font-size: 70px;
+    }
+
+    .intro h2 {
+        font-size: 42px;
+    }
+
+    .section-title {
+        font-size: 42px;
+    }
+
+    .date-number {
+        font-size: 85px;
+    }
+
+    .countdown {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-grid img,
+    .photo-grid img:nth-child(3) {
+        grid-column: auto;
+
+        height: 500px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .location h2 {
+        font-size: 52px;
+    }
+
+}
+
+
+/* =========================
+   АЧЫЛГАНДА SCROLL
+========================= */
+
+body.locked {
+    overflow: hidden;
+}
+
+</style>
+</head>
+
+
+<body class="locked">
+
+
+<!-- =====================================
+     КОНВЕРТ
+===================================== -->
+
+<div id="envelopeScreen">
+
+    <div class="envelope-wrapper">
+
+        <div class="envelope-title">
+            Сиздерге өзгөчө чакыруу бар
+        </div>
+
+        <div
+            class="envelope"
+            id="envelope"
+            onclick="openInvitation()"
+        >
+
+            <div class="envelope-back"></div>
+
+            <div class="envelope-left"></div>
+
+            <div class="envelope-right"></div>
+
+            <div class="envelope-bottom"></div>
+
+            <div class="envelope-flap"></div>
+
+            <div class="seal">
+                A & B
+            </div>
+
+        </div>
+
+        <div class="open-text">
+            ЧАКЫРУУНУ АЧУУ ҮЧҮН БАСЫҢЫЗ
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     МУЗЫКА
+===================================== -->
+
+<audio id="music" loop>
+    <source src="assets/music.mp3" type="audio/mpeg">
+</audio>
+
+<button
+    class="music-button"
+    id="musicButton"
+    onclick="toggleMusic()"
+>
+    ♫
+</button>
+
+
+<!-- =====================================
+     HERO
+===================================== -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="small-title">
+            Үйлөнүү үлпөт тою
+        </div>
+
+        <h1>
+            Асан
+        </h1>
+
+        <div class="hero-and">
+            &
+        </div>
+
+        <h1>
+            Батма
+        </h1>
+
+        <div class="gold-line"></div>
+
+        <div class="hero-date">
+            26 · 09 · 2026
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     INTRO
+===================================== -->
+
+<section class="intro">
+
+    <div class="intro-inner">
+
+        <div class="intro-label">
+            СҮЙҮҮ МЕНЕН
+        </div>
+
+        <h2>
+            Биздин кубанычыбызга
+            ортоктош болуңуздар
+        </h2>
+
+        <p>
+            Кымбаттуу жакындарыбыз жана
+            кадырлуу конокторубуз!
+            Сиздерди жашообуздагы эң
+            маанилүү күндөрдүн биринде
+            жанымызда болуп, кубанычыбызды
+            бөлүшүүгө чакырабыз.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     DATE
+===================================== -->
+
+<section class="date-section">
+
+    <h2 class="section-title">
+        Той күнү
+    </h2>
+
+    <div class="date-card">
+
+        <div class="date-number">
+            26
+        </div>
+
+        <div class="date-month">
+            Сентябрь
+        </div>
+
+        <div class="date-year">
+            2026
+        </div>
+
+
+        <!-- COUNTDOWN -->
+
+        <div class="countdown">
+
+            <div class="count-box">
+                <strong id="days">00</strong>
+                <span>Күн</span>
+            </div>
+
+            <div class="count-box">
+                <strong id="hours">00</strong>
+                <span>Саат</span>
+            </div>
+
+            <div class="count-box">
+                <strong id="minutes">00</strong>
+                <span>Мүнөт</span>
+            </div>
+
+            <div class="count-box">
+                <strong id="seconds">00</strong>
+                <span>Секунда</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     PHOTO GALLERY
+===================================== -->
+
+<section class="photo-section">
+
+    <h2 class="section-title">
+        Биздин сүйүү баяныбыз
+    </h2>
+
+    <div class="photo-grid">
+
+        <img
+            src="assets/photo1.jpg"
+            alt="Асан жана Батма"
+        >
+
+        <img
+            src="assets/photo2.jpg"
+            alt="Жубайлар"
+        >
+
+        <img
+            src="assets/photo3.jpg"
+            alt="Wedding"
+        >
+
+        <img
+            src="assets/photo4.jpg"
+            alt="Wedding rings"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     ТОЙ ЭЭЛЕРИ
+===================================== -->
+
+<section class="info-section">
+
+    <h2 class="section-title">
+        Той ээлери
+    </h2>
+
+    <div class="info-grid">
+
+        <div class="info-card">
+
+            <div class="info-icon">
+                ♡
+            </div>
+
+            <h3>
+                Асек
+            </h3>
+
+            <p>
+                Той ээсинин аты
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="info-icon">
+                ♡
+            </div>
+
+            <h3>
+                Алтынай
+            </h3>
+
+            <p>
+                Той ээсинин аты
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="info-icon">
+                ♡
+            </div>
+
+            <h3>
+                17:00
+            </h3>
+
+            <p>
+                Конокторду күтүү убактысы
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     LOCATION
+===================================== -->
+
+<section class="location">
+
+    <h2>
+        Кайда?
+    </h2>
+
+    <div class="gold-line"></div>
+
+    <div class="location-name">
+        «Арзуу» рестораны
+    </div>
+
+    <div class="location-time">
+        Ош шаары · 17:00
+    </div>
+
+    <a
+        class="map-button"
+        href="https://www.google.com/maps/search/?api=1&query=Арзуу+ресторан+Ош"
+        target="_blank"
+    >
+        📍 Картадан көрүү
+    </a>
+
+</section>
+
+
+<!-- =====================================
+     FINAL PHOTO
+===================================== -->
+
+<section class="final-section">
+
+    <div class="final-content">
+
+        <h2>
+            Сиздерди
+            күтөбүз
+        </h2>
+
+        <p>
+            Бул өзгөчө күндө биздин
+            кубанычыбызды бөлүшүп,
+            жакшы тилектериңиздер менен
+            төрүбүздөн орун алыңыздар.
+        </p>
+
+        <div class="gold-line"></div>
+
+        <p>
+            Асан & Батма
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
+
+<footer class="footer">
+
+    АСАН & БАТМА · 26.09.2026
+
+</footer>
+
+
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
+<script>
+
+/* =====================================
+   КОНВЕРТТИ АЧУУ
+===================================== */
+
+function openInvitation() {
+
+    const envelope =
+        document.getElementById("envelope");
+
+    const screen =
+        document.getElementById("envelopeScreen");
+
+    const music =
+        document.getElementById("music");
+
+    envelope.classList.add("open");
+
+
+    /*
+      Музыка браузер уруксат бергенде
+      ушул жерден башталат.
+    */
+
+    setTimeout(() => {
+
+        music.volume = 0.45;
+
+        music.play().catch(() => {
+            console.log(
+                "Музыка автоматтык ойнотулган жок."
+            );
+        });
+
+    }, 500);
+
+
+    setTimeout(() => {
+
+        screen.classList.add("hide");
+
+        document.body.classList.remove("locked");
+
+    }, 1100);
+
+}
+
+
+/* =====================================
+   МУЗЫКАНЫ ТОКТОТУУ / КОЮУ
+===================================== */
+
+function toggleMusic() {
+
+    const music =
+        document.getElementById("music");
+
+    const button =
+        document.getElementById("musicButton");
+
+
+    if (music.paused) {
+
+        music.play();
+
+        button.innerHTML = "♫";
+
+    } else {
+
+        music.pause();
+
+        button.innerHTML = "🔇";
+
+    }
+
+}
+
+
+/* =====================================
+   COUNTDOWN
+===================================== */
+
+const weddingDate =
+    new Date("September 26, 2026 17:00:00").getTime();
+
+
+function updateCountdown() {
+
+    const now =
+        new Date().getTime();
+
+    const difference =
+        weddingDate - now;
+
+
+    if (difference <= 0) {
+
+        document.getElementById("days").innerHTML = "00";
+        document.getElementById("hours").innerHTML = "00";
+        document.getElementById("minutes").innerHTML = "00";
+        document.getElementById("seconds").innerHTML = "00";
+
+        return;
+
+    }
+
+
+    const days =
+        Math.floor(
+            difference /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    const hours =
+        Math.floor(
+            (difference %
+            (1000 * 60 * 60 * 24)) /
+            (1000 * 60 * 60)
+        );
+
+
+    const minutes =
+        Math.floor(
+            (difference %
+            (1000 * 60 * 60)) /
+            (1000 * 60)
+        );
+
+
+    const seconds =
+        Math.floor(
+            (difference %
+            (1000 * 60)) /
+            1000
+        );
+
+
+    document.getElementById("days")
+        .innerHTML =
+        String(days).padStart(2, "0");
+
+
+    document.getElementById("hours")
+        .innerHTML =
+        String(hours).padStart(2, "0");
+
+
+    document.getElementById("minutes")
+        .innerHTML =
+        String(minutes).padStart(2, "0");
+
+
+    document.getElementById("seconds")
+        .innerHTML =
+        String(seconds).padStart(2, "0");
+
+}
+
+
+updateCountdown();
+
+setInterval(
+    updateCountdown,
+    1000
+);
+
+</script>
+
+
+</body>
+</html>

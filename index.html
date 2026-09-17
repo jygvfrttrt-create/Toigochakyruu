@@ -1,884 +1,715 @@
 <!DOCTYPE html>
 <html lang="ky">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Асан & Батма | Тойго чакыруу</title>
-
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<style>
-
-/* =========================
-   НЕГИЗГИ ЖӨНДӨӨЛӨР
-========================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: "Montserrat", sans-serif;
-    background: #f7f2f7;
-    color: #493d50;
-    overflow-x: hidden;
-}
-
-h1,
-h2,
-h3 {
-    font-family: "Cormorant Garamond", serif;
-}
-
-section {
-    position: relative;
-    overflow: hidden;
-}
-
-
-/* =========================
-   КОНВЕРТ
-========================= */
-
-#envelopeScreen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #d9c8dc 0%,
-            #b9a4bf 45%,
-            #89758f 100%
-        );
-
-    transition: opacity 1s ease, visibility 1s ease;
-}
-
-#envelopeScreen.hide {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.envelope-wrapper {
-    text-align: center;
-    width: 90%;
-    max-width: 430px;
-}
-
-.envelope-title {
-    color: white;
-    font-family: "Cormorant Garamond", serif;
-    font-size: 32px;
-    margin-bottom: 35px;
-    letter-spacing: 2px;
-}
-
-.envelope {
-    width: 330px;
-    height: 220px;
-    margin: auto;
-    position: relative;
-    cursor: pointer;
-    perspective: 1000px;
-    filter: drop-shadow(0 25px 30px rgba(40, 25, 45, .25));
-}
-
-.envelope-back {
-    position: absolute;
-    inset: 0;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    background: #eee4ef;
+    <title>Асан & Батма — Тойго чакыруу</title>
 
-    border-radius: 5px;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-.envelope-left,
-.envelope-right,
-.envelope-bottom {
-    position: absolute;
-    z-index: 3;
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-.envelope-left {
-    left: 0;
-    bottom: 0;
+        body {
+            background: #eee8f2;
+            color: #4f4652;
+            font-family: Georgia, "Times New Roman", serif;
+            overflow-x: hidden;
+        }
 
-    width: 0;
-    height: 0;
+        /* =========================
+           INTRO / КОНВЕРТ
+        ========================= */
 
-    border-top: 110px solid transparent;
-    border-bottom: 110px solid transparent;
-    border-left: 165px solid #d8c5da;
-}
+        .intro {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
 
-.envelope-right {
-    right: 0;
-    bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    width: 0;
-    height: 0;
+            background:
+                linear-gradient(
+                    rgba(58, 45, 65, 0.35),
+                    rgba(58, 45, 65, 0.35)
+                ),
+                url("IMG_5185.jpeg") center / cover no-repeat;
 
-    border-top: 110px solid transparent;
-    border-bottom: 110px solid transparent;
-    border-right: 165px solid #d0bad3;
-}
+            transition:
+                opacity 1s ease,
+                visibility 1s ease;
+        }
 
-.envelope-bottom {
-    left: 0;
-    bottom: 0;
+        .intro.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-    width: 0;
-    height: 0;
+        .envelope-wrapper {
+            text-align: center;
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+        }
 
-    border-left: 165px solid transparent;
-    border-right: 165px solid transparent;
-    border-bottom: 125px solid #e8dce9;
-}
+        .envelope {
+            position: relative;
 
-.envelope-flap {
-    position: absolute;
-    top: 0;
-    left: 0;
+            width: 280px;
+            height: 190px;
 
-    width: 0;
-    height: 0;
+            background: #e8dff0;
 
-    border-left: 165px solid transparent;
-    border-right: 165px solid transparent;
-    border-top: 125px solid #c9b1ce;
+            border-radius: 8px;
 
-    transform-origin: top;
-    transition: transform 1s ease;
-    z-index: 5;
-}
+            box-shadow:
+                0 25px 60px rgba(35, 25, 40, 0.35);
 
-.envelope.open .envelope-flap {
-    transform: rotateX(180deg);
-}
+            overflow: hidden;
+        }
 
-.seal {
-    position: absolute;
+        /* Конверттин үстүңкү бөлүгү */
 
-    left: 50%;
-    top: 52%;
+        .envelope::before {
+            content: "";
 
-    transform: translate(-50%, -50%);
+            position: absolute;
 
-    width: 62px;
-    height: 62px;
+            left: 0;
+            top: 0;
 
-    border-radius: 50%;
+            width: 0;
+            height: 0;
 
-    background: #b59a64;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 105px solid #d5c5df;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            z-index: 3;
 
-    color: white;
-    font-family: "Cormorant Garamond", serif;
-    font-size: 25px;
+            transform-origin: top;
+            transition: transform 1s ease;
+        }
 
-    z-index: 10;
+        /* Конверттин ылдыйкы катмарлары */
 
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.2),
-        inset 0 0 0 3px rgba(255,255,255,.25);
-}
+        .envelope::after {
+            content: "";
 
-.open-text {
-    margin-top: 30px;
+            position: absolute;
 
-    color: white;
+            left: 0;
+            bottom: 0;
 
-    font-size: 13px;
-    letter-spacing: 3px;
+            width: 0;
+            height: 0;
 
-    animation: pulse 2s infinite;
-}
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-bottom: 100px solid #cbb8d5;
 
-@keyframes pulse {
+            z-index: 2;
+        }
 
-    0%,100% {
-        opacity: .5;
-    }
+        .seal {
+            position: absolute;
 
-    50% {
-        opacity: 1;
-    }
-}
+            left: 50%;
+            top: 50%;
 
+            transform: translate(-50%, -50%);
 
-/* =========================
-   МУЗЫКА
-========================= */
+            width: 65px;
+            height: 65px;
 
-.music-button {
-    position: fixed;
+            border-radius: 50%;
 
-    right: 20px;
-    top: 20px;
+            background: #b49abb;
 
-    width: 48px;
-    height: 48px;
+            border: 3px solid #eee6f1;
 
-    border-radius: 50%;
+            color: white;
 
-    border: 1px solid rgba(255,255,255,.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    background: rgba(110, 86, 118, .75);
+            font-size: 22px;
 
-    backdrop-filter: blur(10px);
+            z-index: 10;
 
-    color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 
-    z-index: 500;
+            transition: opacity .5s ease;
+        }
 
-    cursor: pointer;
+        .envelope-text {
+            margin-top: 25px;
 
-    font-size: 18px;
-}
+            color: white;
 
+            font-size: 17px;
+            letter-spacing: 2px;
 
-/* =========================
-   HERO
-========================= */
+            text-shadow: 0 2px 10px rgba(0,0,0,.4);
+        }
 
-.hero {
-    min-height: 100vh;
+        .intro-names {
+            margin-top: 12px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            color: white;
 
-    text-align: center;
+            font-size: 30px;
+            font-style: italic;
 
-    color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,.5);
+        }
 
-    background:
-        linear-gradient(
-            rgba(47, 32, 52, .38),
-            rgba(47, 32, 52, .55)
-        ),
-        url("assets/photo1.jpg") center/cover;
+        /* Конверт ачылгандагы эффект */
 
-    padding: 40px 20px;
-}
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+        }
 
-.hero-content {
-    max-width: 800px;
+        .envelope-wrapper.open .seal {
+            opacity: 0;
+        }
 
-    animation: fadeUp 1.5s ease;
-}
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
 
-.small-title {
-    font-size: 14px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
+            50% {
+                transform: translateY(-10px);
+            }
+        }
 
-    margin-bottom: 20px;
-}
 
-.hero h1 {
-    font-size: clamp(65px, 14vw, 135px);
+        /* =========================
+           НЕГИЗГИ САЙТ
+        ========================= */
 
-    font-weight: 500;
+        .main {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
 
-    line-height: .8;
+        .main.show {
+            opacity: 1;
+        }
 
-    letter-spacing: 5px;
-}
 
-.hero-and {
-    font-size: 35px;
+        /* =========================
+           HERO
+        ========================= */
 
-    font-family: "Cormorant Garamond", serif;
+        .hero {
+            min-height: 100vh;
 
-    margin: 25px 0;
-}
+            position: relative;
 
-.hero-date {
-    margin-top: 35px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
 
-    font-size: 15px;
+            padding: 50px 20px;
 
-    letter-spacing: 4px;
-}
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(35,25,40,0.05),
+                    rgba(35,25,40,0.65)
+                ),
+                url("IMG_5186.jpeg") center / cover no-repeat;
+        }
 
-.gold-line {
-    width: 100px;
-    height: 1px;
+        .hero-content {
+            text-align: center;
+            color: white;
 
-    background: #e2cf9a;
+            width: 100%;
+            max-width: 700px;
 
-    margin: 25px auto;
-}
+            padding-bottom: 35px;
 
+            text-shadow: 0 3px 15px rgba(0,0,0,.5);
+        }
 
-/* =========================
-   INTRO
-========================= */
+        .small-title {
+            font-size: 16px;
+            letter-spacing: 4px;
+            margin-bottom: 18px;
+        }
 
-.intro {
-    background: #f8f3f8;
+        .hero h1 {
+            font-size: clamp(48px, 13vw, 90px);
 
-    padding: 100px 20px;
+            font-weight: normal;
 
-    text-align: center;
-}
+            font-style: italic;
 
-.intro-inner {
-    max-width: 750px;
-    margin: auto;
-}
+            margin-bottom: 10px;
+        }
 
-.intro-label {
-    color: #9b82a2;
+        .hero-date {
+            font-size: 22px;
+            letter-spacing: 4px;
+        }
 
-    font-size: 12px;
 
-    letter-spacing: 4px;
+        /* =========================
+           БӨЛҮМДӨР
+        ========================= */
 
-    margin-bottom: 25px;
-}
+        .section {
+            padding: 80px 20px;
 
-.intro h2 {
-    font-size: 50px;
+            text-align: center;
 
-    font-weight: 500;
+            background: #f7f3f8;
+        }
 
-    color: #58465e;
+        .section:nth-child(even) {
+            background: #eee7f1;
+        }
 
-    margin-bottom: 25px;
-}
+        .decor {
+            color: #a68db1;
 
-.intro p {
-    font-family: "Cormorant Garamond", serif;
+            font-size: 30px;
 
-    font-size: 24px;
+            margin-bottom: 20px;
+        }
 
-    line-height: 1.7;
+        .section h2 {
+            font-size: 35px;
 
-    color: #6d6072;
-}
+            font-weight: normal;
 
+            color: #75617c;
 
-/* =========================
-   БӨЛҮМ
-========================= */
+            margin-bottom: 25px;
+        }
 
-.section-title {
-    text-align: center;
+        .section p {
+            font-size: 18px;
 
-    font-size: 52px;
+            line-height: 1.8;
 
-    font-weight: 500;
+            max-width: 650px;
 
-    color: #59475f;
+            margin: 0 auto;
 
-    margin-bottom: 50px;
-}
+            color: #625967;
+        }
 
 
-/* =========================
-   DATE
-========================= */
+        /* =========================
+           ЧАКЫРУУ ТЕКСТИ
+        ========================= */
 
-.date-section {
-    padding: 100px 20px;
+        .invitation {
+            font-size: 21px !important;
 
-    background: #eae0eb;
-}
+            font-style: italic;
 
-.date-card {
-    max-width: 700px;
+            color: #625568 !important;
 
-    margin: auto;
+            line-height: 2 !important;
+        }
 
-    background: rgba(255,255,255,.6);
 
-    border-radius: 30px;
+        /* =========================
+           АТТАР
+        ========================= */
 
-    padding: 55px 30px;
+        .names {
+            padding: 40px 20px;
+        }
 
-    text-align: center;
+        .names-main {
+            font-size: clamp(40px, 10vw, 70px);
 
-    box-shadow: 0 15px 50px rgba(75,55,80,.1);
-}
+            font-style: italic;
 
-.date-number {
-    font-family: "Cormorant Garamond", serif;
+            color: #7e6887;
 
-    font-size: 110px;
+            margin-bottom: 10px;
+        }
 
-    line-height: .8;
+        .and {
+            font-size: 25px;
 
-    color: #715878;
-}
+            color: #b49abb;
 
-.date-month {
-    font-size: 22px;
+            margin: 10px;
+        }
 
-    letter-spacing: 6px;
 
-    text-transform: uppercase;
+        /* =========================
+           ДАТА / УБАКЫТ
+        ========================= */
 
-    margin-top: 20px;
+        .details {
+            max-width: 700px;
 
-    color: #846c8a;
-}
+            margin: auto;
 
-.date-year {
-    margin-top: 15px;
+            display: grid;
 
-    font-family: "Cormorant Garamond", serif;
+            grid-template-columns:
+                repeat(3, 1fr);
 
-    font-size: 30px;
-}
+            gap: 15px;
+        }
 
+        .detail {
+            padding: 25px 10px;
 
-/* =========================
-   COUNTDOWN
-========================= */
+            background: rgba(255,255,255,.65);
 
-.countdown {
-    display: grid;
+            border-radius: 15px;
 
-    grid-template-columns:
-        repeat(4, 1fr);
+            border: 1px solid #ded2e3;
+        }
 
-    gap: 12px;
+        .detail-icon {
+            font-size: 28px;
 
-    max-width: 650px;
+            margin-bottom: 12px;
 
-    margin: 50px auto 0;
-}
+            color: #9d83a9;
+        }
 
-.count-box {
-    background: rgba(255,255,255,.7);
+        .detail-title {
+            font-size: 14px;
 
-    border-radius: 15px;
+            letter-spacing: 2px;
 
-    padding: 20px 10px;
-}
+            color: #95809d;
 
-.count-box strong {
-    display: block;
+            margin-bottom: 8px;
+        }
 
-    font-family: "Cormorant Garamond", serif;
+        .detail-value {
+            font-size: 19px;
 
-    font-size: 38px;
+            color: #594c60;
 
-    color: #654f6c;
-}
+            font-weight: bold;
+        }
 
-.count-box span {
-    font-size: 10px;
 
-    letter-spacing: 2px;
+        /* =========================
+           СҮРӨТ
+        ========================= */
 
-    text-transform: uppercase;
-}
+        .photo-section {
+            padding: 70px 15px;
 
+            background: #eee7f1;
+        }
 
-/* =========================
-   PHOTO
-========================= */
+        .photo-grid {
+            max-width: 900px;
 
-.photo-section {
-    padding: 100px 20px;
+            margin: 35px auto 0;
 
-    background: #f8f5f8;
-}
+            display: grid;
 
-.photo-grid {
-    max-width: 1100px;
+            grid-template-columns:
+                repeat(2, 1fr);
 
-    margin: auto;
+            gap: 15px;
+        }
 
-    display: grid;
+        .photo-grid img {
+            width: 100%;
 
-    grid-template-columns:
-        repeat(2, 1fr);
+            height: 420px;
 
-    gap: 20px;
-}
+            object-fit: cover;
 
-.photo-grid img {
-    width: 100%;
+            border-radius: 15px;
 
-    height: 550px;
+            box-shadow:
+                0 10px 30px rgba(60,40,70,.18);
+        }
 
-    object-fit: cover;
+        .photo-grid img:first-child {
+            grid-column: span 2;
 
-    border-radius: 5px;
+            height: 520px;
+        }
 
-    transition: transform .6s ease;
 
-    box-shadow: 0 15px 40px rgba(50,35,55,.12);
-}
+        /* =========================
+           РЕСТОРАН
+        ========================= */
 
-.photo-grid img:hover {
-    transform: scale(1.02);
-}
+        .location-box {
+            max-width: 600px;
 
-.photo-grid img:nth-child(3) {
-    grid-column: span 2;
+            margin: 30px auto;
 
-    height: 650px;
-}
+            padding: 35px 20px;
 
+            background: rgba(255,255,255,.6);
 
-/* =========================
-   INFO
-========================= */
+            border-radius: 20px;
 
-.info-section {
-    padding: 100px 20px;
+            border: 1px solid #ded2e3;
+        }
 
-    background: #eee6ef;
-}
+        .restaurant {
+            font-size: 28px;
 
-.info-grid {
-    max-width: 1000px;
+            color: #725d7c;
 
-    margin: auto;
+            margin-bottom: 12px;
+        }
 
-    display: grid;
+        .city {
+            font-size: 18px;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+            color: #716574;
+        }
 
-    gap: 20px;
-}
 
-.info-card {
-    background: rgba(255,255,255,.65);
+        /* =========================
+           КАЛЕНДАРЬ
+        ========================= */
 
-    padding: 45px 25px;
+        .calendar {
+            max-width: 420px;
 
-    text-align: center;
+            margin: 30px auto;
 
-    border-radius: 20px;
-}
+            padding: 30px 20px;
 
-.info-icon {
-    font-size: 35px;
+            background: #faf8fb;
 
-    margin-bottom: 20px;
-}
+            border-radius: 20px;
 
-.info-card h3 {
-    font-size: 30px;
+            box-shadow:
+                0 10px 35px rgba(80,60,90,.12);
+        }
 
-    margin-bottom: 15px;
+        .month {
+            font-size: 30px;
 
-    color: #604d67;
-}
+            color: #806a89;
 
-.info-card p {
-    line-height: 1.7;
+            margin-bottom: 5px;
+        }
 
-    font-size: 14px;
-}
+        .year {
+            font-size: 17px;
 
+            color: #9b8b9f;
 
-/* =========================
-   РЕСТОРАН
-========================= */
+            margin-bottom: 25px;
+        }
 
-.location {
-    padding: 110px 20px;
+        .calendar-grid {
+            display: grid;
 
-    text-align: center;
+            grid-template-columns:
+                repeat(7, 1fr);
 
-    background:
-        linear-gradient(
-            rgba(45,34,48,.48),
-            rgba(45,34,48,.58)
-        ),
-        url("assets/photo4.jpg") center/cover;
+            gap: 10px;
 
-    color: white;
-}
+            font-size: 15px;
+        }
 
-.location h2 {
-    font-size: 65px;
+        .calendar-grid div {
+            padding: 7px 2px;
+        }
 
-    font-weight: 500;
-}
+        .weekend {
+            color: #9d7db0;
+        }
 
-.location-name {
-    font-family: "Cormorant Garamond", serif;
+        .selected {
+            position: relative;
 
-    font-size: 32px;
+            color: white !important;
 
-    margin: 20px 0;
-}
+            background: #9b82a7;
 
-.location-time {
-    font-size: 18px;
+            border-radius: 50%;
 
-    letter-spacing: 3px;
-}
+            width: 34px;
+            height: 34px;
 
-.map-button {
-    display: inline-block;
+            margin: auto;
 
-    margin-top: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    padding: 15px 35px;
 
-    border: 1px solid rgba(255,255,255,.7);
+        /* =========================
+           FOOTER
+        ========================= */
 
-    border-radius: 50px;
+        .footer {
+            padding: 80px 20px;
 
-    color: white;
+            text-align: center;
 
-    text-decoration: none;
+            background: #ddd0e2;
 
-    transition: .3s;
-}
+            color: #66556d;
+        }
 
-.map-button:hover {
-    background: white;
+        .footer h2 {
+            font-size: 38px;
 
-    color: #59475f;
-}
+            font-weight: normal;
 
+            font-style: italic;
 
-/* =========================
-   FINAL
-========================= */
+            margin-bottom: 20px;
+        }
 
-.final-section {
-    min-height: 90vh;
+        .footer p {
+            font-size: 17px;
 
-    padding: 100px 20px;
+            line-height: 1.8;
+        }
 
-    display: flex;
 
-    align-items: center;
+        /* =========================
+           MUSIC BUTTON
+        ========================= */
 
-    justify-content: center;
+        .music-button {
+            position: fixed;
 
-    text-align: center;
+            right: 18px;
+            bottom: 18px;
 
-    background:
-        linear-gradient(
-            rgba(40,30,43,.3),
-            rgba(40,30,43,.55)
-        ),
-        url("assets/photo5.jpg") center/cover;
+            z-index: 500;
 
-    color: white;
-}
+            width: 52px;
+            height: 52px;
 
-.final-content {
-    max-width: 700px;
-}
+            border-radius: 50%;
 
-.final-content h2 {
-    font-size: clamp(55px, 10vw, 100px);
+            border: 1px solid rgba(255,255,255,.7);
 
-    font-weight: 500;
+            background: rgba(130,105,140,.85);
 
-    line-height: .9;
+            color: white;
 
-    margin-bottom: 30px;
-}
+            font-size: 21px;
 
-.final-content p {
-    font-family: "Cormorant Garamond", serif;
+            cursor: pointer;
 
-    font-size: 27px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.2);
 
-    line-height: 1.6;
-}
+            display: none;
 
-.footer {
-    background: #514157;
+            align-items: center;
+            justify-content: center;
+        }
 
-    color: #eee;
+        .music-button.show {
+            display: flex;
+        }
 
-    padding: 40px 20px;
 
-    text-align: center;
+        /* =========================
+           MOBILE
+        ========================= */
 
-    font-size: 12px;
+        @media (max-width: 600px) {
 
-    letter-spacing: 2px;
-}
+            .envelope {
+                width: 270px;
+                height: 180px;
+            }
 
+            .envelope::before {
+                border-left-width: 135px;
+                border-right-width: 135px;
+                border-top-width: 100px;
+            }
 
-/* =========================
-   АНИМАЦИЯ
-========================= */
+            .envelope::after {
+                border-left-width: 135px;
+                border-right-width: 135px;
+            }
 
-@keyframes fadeUp {
+            .details {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
 
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+            .photo-grid img,
+            .photo-grid img:first-child {
+                grid-column: auto;
+                height: 430px;
+            }
 
-}
+            .section {
+                padding: 65px 18px;
+            }
+        }
 
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 700px) {
-
-    .envelope {
-        width: 290px;
-        height: 195px;
-    }
-
-    .envelope-left {
-        border-top-width: 97px;
-        border-bottom-width: 97px;
-        border-left-width: 145px;
-    }
-
-    .envelope-right {
-        border-top-width: 97px;
-        border-bottom-width: 97px;
-        border-right-width: 145px;
-    }
-
-    .envelope-bottom {
-        border-left-width: 145px;
-        border-right-width: 145px;
-        border-bottom-width: 110px;
-    }
-
-    .envelope-flap {
-        border-left-width: 145px;
-        border-right-width: 145px;
-        border-top-width: 110px;
-    }
-
-    .hero {
-        min-height: 100svh;
-    }
-
-    .hero h1 {
-        font-size: 70px;
-    }
-
-    .intro h2 {
-        font-size: 42px;
-    }
-
-    .section-title {
-        font-size: 42px;
-    }
-
-    .date-number {
-        font-size: 85px;
-    }
-
-    .countdown {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .photo-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .photo-grid img,
-    .photo-grid img:nth-child(3) {
-        grid-column: auto;
-
-        height: 500px;
-    }
-
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .location h2 {
-        font-size: 52px;
-    }
-
-}
-
-
-/* =========================
-   АЧЫЛГАНДА SCROLL
-========================= */
-
-body.locked {
-    overflow: hidden;
-}
-
-</style>
+    </style>
 </head>
 
 
-<body class="locked">
+<body>
+
+
+<!-- =====================================
+     МУЗЫКА
+===================================== -->
+
+<audio id="weddingMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 
 <!-- =====================================
      КОНВЕРТ
 ===================================== -->
 
-<div id="envelopeScreen">
+<div class="intro" id="intro">
 
-    <div class="envelope-wrapper">
+    <div class="envelope-wrapper" id="envelope">
 
-        <div class="envelope-title">
-            Сиздерге өзгөчө чакыруу бар
-        </div>
-
-        <div
-            class="envelope"
-            id="envelope"
-            onclick="openInvitation()"
-        >
-
-            <div class="envelope-back"></div>
-
-            <div class="envelope-left"></div>
-
-            <div class="envelope-right"></div>
-
-            <div class="envelope-bottom"></div>
-
-            <div class="envelope-flap"></div>
+        <div class="envelope">
 
             <div class="seal">
-                A & B
+                ♥
             </div>
 
         </div>
 
-        <div class="open-text">
+        <div class="intro-names">
+            Асан & Батма
+        </div>
+
+        <div class="envelope-text">
             ЧАКЫРУУНУ АЧУУ ҮЧҮН БАСЫҢЫЗ
         </div>
 
@@ -888,492 +719,510 @@ body.locked {
 
 
 <!-- =====================================
-     МУЗЫКА
+     НЕГИЗГИ САЙТ
 ===================================== -->
 
-<audio id="music" loop>
-    <source src="assets/music.mp3" type="audio/mpeg">
-</audio>
+<main class="main" id="main">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="small-title">
+                ҮЙ-БҮЛӨБҮЗДҮН БАКТЫЛУУ КҮНҮ
+            </div>
+
+            <h1>
+                Асан & Батма
+            </h1>
+
+            <div class="hero-date">
+                26 • 09 • 2026
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ЧАКЫРУУ -->
+
+    <section class="section">
+
+        <div class="decor">
+            ❦
+        </div>
+
+        <h2>
+            Урматтуу коноктор!
+        </h2>
+
+        <p class="invitation">
+
+            Сиздерди жашообуздагы эң маанилүү
+            жана бактылуу күндөрдүн бири болгон
+            үлпөт тоюбузга чын жүрөктөн чакырабыз.
+
+            <br><br>
+
+            Бул өзгөчө күнү биз менен бирге болуп,
+            кубанычыбызды бөлүшүп,
+            ак баталарыңызды берип коюшуңуздарды каалайбыз.
+
+        </p>
+
+    </section>
+
+
+    <!-- АТТАР -->
+
+    <section class="section names">
+
+        <div class="decor">
+            ✦
+        </div>
+
+        <div class="names-main">
+            Асан
+        </div>
+
+        <div class="and">
+            &
+        </div>
+
+        <div class="names-main">
+            Батма
+        </div>
+
+        <p>
+            Эки жүрөк — бир тагдыр.
+            <br>
+            Эки адам — бир үй-бүлө.
+        </p>
+
+    </section>
+
+
+    <!-- СҮРӨТ -->
+
+    <section class="photo-section">
+
+        <div class="section" style="background:transparent;padding-top:0;">
+
+            <div class="decor">
+                ❦
+            </div>
+
+            <h2>
+                Биздин өзгөчө күн
+            </h2>
+
+        </div>
+
+
+        <div class="photo-grid">
+
+            <!-- Биринчи сүрөт -->
+
+            <img
+                src="IMG_5185.jpeg"
+                alt="Асан жана Батма"
+            >
+
+            <!-- Экинчи сүрөт -->
+
+            <img
+                src="IMG_5186.jpeg"
+                alt="Үйлөнүү тою"
+            >
+
+            <!-- Үчүнчү сүрөт болсо ушул жерге -->
+            <!--
+            <img
+                src="IMG_5187.jpeg"
+                alt="Wedding"
+            >
+            -->
+
+        </div>
+
+    </section>
+
+
+    <!-- ДАТА / УБАКЫТ -->
+
+    <section class="section">
+
+        <div class="decor">
+            ✦
+        </div>
+
+        <h2>
+            Тойубуздун күнү
+        </h2>
+
+
+        <div class="details">
+
+
+            <div class="detail">
+
+                <div class="detail-icon">
+                    ♡
+                </div>
+
+                <div class="detail-title">
+                    КҮНҮ
+                </div>
+
+                <div class="detail-value">
+                    26.09.2026
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-icon">
+                    ◷
+                </div>
+
+                <div class="detail-title">
+                    БАШТАЛЫШЫ
+                </div>
+
+                <div class="detail-value">
+                    17:00
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-icon">
+                    ♧
+                </div>
+
+                <div class="detail-title">
+                    ШААР
+                </div>
+
+                <div class="detail-value">
+                    Ош шаары
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- КАЛЕНДАРЬ -->
+
+    <section class="section">
+
+        <div class="decor">
+            ❦
+        </div>
+
+        <h2>
+            Күнүбүздү белгилеп коюңуз
+        </h2>
+
+
+        <div class="calendar">
+
+            <div class="month">
+                Сентябрь
+            </div>
+
+            <div class="year">
+                2026
+            </div>
+
+
+            <div class="calendar-grid">
+
+                <div>Дш</div>
+                <div>Шш</div>
+                <div>Шр</div>
+                <div>Бш</div>
+                <div>Жм</div>
+                <div class="weekend">Иш</div>
+                <div class="weekend">Жк</div>
+
+
+                <div></div>
+
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div class="weekend">5</div>
+                <div class="weekend">6</div>
+
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+                <div>11</div>
+                <div class="weekend">12</div>
+                <div class="weekend">13</div>
+
+                <div>14</div>
+                <div>15</div>
+                <div>16</div>
+                <div>17</div>
+                <div>18</div>
+                <div class="weekend">19</div>
+                <div class="weekend">20</div>
+
+                <div>21</div>
+                <div>22</div>
+                <div>23</div>
+                <div>24</div>
+                <div>25</div>
+
+                <div class="weekend selected">
+                    26
+                </div>
+
+                <div class="weekend">27</div>
+
+                <div>28</div>
+                <div>29</div>
+                <div>30</div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- РЕСТОРАН -->
+
+    <section class="section">
+
+        <div class="decor">
+            ♡
+        </div>
+
+        <h2>
+            Той өтүүчү жер
+        </h2>
+
+
+        <div class="location-box">
+
+            <div class="restaurant">
+                «Арзуу» рестораны
+            </div>
+
+            <div class="city">
+                Ош шаары
+            </div>
+
+            <br>
+
+            <div class="city">
+                26-сентябрь 2026-жыл
+            </div>
+
+            <div class="city">
+                Саат 17:00
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- АКЫРКЫ СҮРӨТ -->
+
+    <section class="photo-section">
+
+        <div class="photo-grid">
+
+            <img
+                src="IMG_5186.jpeg"
+                alt="Асан & Батма"
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="decor">
+            ❦
+        </div>
+
+        <h2>
+            Асан & Батма
+        </h2>
+
+        <p>
+
+            Биздин кубанычыбызды бөлүшүп,
+            <br>
+
+            ак баталарыңызды берип,
+            <br>
+
+            ушул өзгөчө күндө биз менен
+            <br>
+
+            бирге болгонуңуздар үчүн
+            <br>
+
+            чын жүрөктөн ыраазычылык билдиребиз.
+
+        </p>
+
+        <br>
+
+        <p>
+            26 • 09 • 2026
+        </p>
+
+    </footer>
+
+
+</main>
+
+
+<!-- =====================================
+     МУЗЫКА БАШКАРУУ
+===================================== -->
 
 <button
     class="music-button"
     id="musicButton"
-    onclick="toggleMusic()"
+    aria-label="Музыка"
 >
-    ♫
+    ♪
 </button>
 
 
-<!-- =====================================
-     HERO
-===================================== -->
-
-<section class="hero">
-
-    <div class="hero-content">
-
-        <div class="small-title">
-            Үйлөнүү үлпөт тою
-        </div>
-
-        <h1>
-            Асан
-        </h1>
-
-        <div class="hero-and">
-            &
-        </div>
-
-        <h1>
-            Батма
-        </h1>
-
-        <div class="gold-line"></div>
-
-        <div class="hero-date">
-            26 · 09 · 2026
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================
-     INTRO
-===================================== -->
-
-<section class="intro">
-
-    <div class="intro-inner">
-
-        <div class="intro-label">
-            СҮЙҮҮ МЕНЕН
-        </div>
-
-        <h2>
-            Биздин кубанычыбызга
-            ортоктош болуңуздар
-        </h2>
-
-        <p>
-            Кымбаттуу жакындарыбыз жана
-            кадырлуу конокторубуз!
-            Сиздерди жашообуздагы эң
-            маанилүү күндөрдүн биринде
-            жанымызда болуп, кубанычыбызды
-            бөлүшүүгө чакырабыз.
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================
-     DATE
-===================================== -->
-
-<section class="date-section">
-
-    <h2 class="section-title">
-        Той күнү
-    </h2>
-
-    <div class="date-card">
-
-        <div class="date-number">
-            26
-        </div>
-
-        <div class="date-month">
-            Сентябрь
-        </div>
-
-        <div class="date-year">
-            2026
-        </div>
-
-
-        <!-- COUNTDOWN -->
-
-        <div class="countdown">
-
-            <div class="count-box">
-                <strong id="days">00</strong>
-                <span>Күн</span>
-            </div>
-
-            <div class="count-box">
-                <strong id="hours">00</strong>
-                <span>Саат</span>
-            </div>
-
-            <div class="count-box">
-                <strong id="minutes">00</strong>
-                <span>Мүнөт</span>
-            </div>
-
-            <div class="count-box">
-                <strong id="seconds">00</strong>
-                <span>Секунда</span>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================
-     PHOTO GALLERY
-===================================== -->
-
-<section class="photo-section">
-
-    <h2 class="section-title">
-        Биздин сүйүү баяныбыз
-    </h2>
-
-    <div class="photo-grid">
-
-        <img
-            src="assets/photo1.jpg"
-            alt="Асан жана Батма"
-        >
-
-        <img
-            src="assets/photo2.jpg"
-            alt="Жубайлар"
-        >
-
-        <img
-            src="assets/photo3.jpg"
-            alt="Wedding"
-        >
-
-        <img
-            src="assets/photo4.jpg"
-            alt="Wedding rings"
-        >
-
-    </div>
-
-</section>
-
-
-<!-- =====================================
-     ТОЙ ЭЭЛЕРИ
-===================================== -->
-
-<section class="info-section">
-
-    <h2 class="section-title">
-        Той ээлери
-    </h2>
-
-    <div class="info-grid">
-
-        <div class="info-card">
-
-            <div class="info-icon">
-                ♡
-            </div>
-
-            <h3>
-                Асек
-            </h3>
-
-            <p>
-                Той ээсинин аты
-            </p>
-
-        </div>
-
-
-        <div class="info-card">
-
-            <div class="info-icon">
-                ♡
-            </div>
-
-            <h3>
-                Алтынай
-            </h3>
-
-            <p>
-                Той ээсинин аты
-            </p>
-
-        </div>
-
-
-        <div class="info-card">
-
-            <div class="info-icon">
-                ♡
-            </div>
-
-            <h3>
-                17:00
-            </h3>
-
-            <p>
-                Конокторду күтүү убактысы
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================
-     LOCATION
-===================================== -->
-
-<section class="location">
-
-    <h2>
-        Кайда?
-    </h2>
-
-    <div class="gold-line"></div>
-
-    <div class="location-name">
-        «Арзуу» рестораны
-    </div>
-
-    <div class="location-time">
-        Ош шаары · 17:00
-    </div>
-
-    <a
-        class="map-button"
-        href="https://www.google.com/maps/search/?api=1&query=Арзуу+ресторан+Ош"
-        target="_blank"
-    >
-        📍 Картадан көрүү
-    </a>
-
-</section>
-
-
-<!-- =====================================
-     FINAL PHOTO
-===================================== -->
-
-<section class="final-section">
-
-    <div class="final-content">
-
-        <h2>
-            Сиздерди
-            күтөбүз
-        </h2>
-
-        <p>
-            Бул өзгөчө күндө биздин
-            кубанычыбызды бөлүшүп,
-            жакшы тилектериңиздер менен
-            төрүбүздөн орун алыңыздар.
-        </p>
-
-        <div class="gold-line"></div>
-
-        <p>
-            Асан & Батма
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================
-     FOOTER
-===================================== -->
-
-<footer class="footer">
-
-    АСАН & БАТМА · 26.09.2026
-
-</footer>
-
-
-<!-- =====================================
-     JAVASCRIPT
-===================================== -->
 
 <script>
 
-/* =====================================
-   КОНВЕРТТИ АЧУУ
-===================================== */
+    const envelope = document.getElementById("envelope");
 
-function openInvitation() {
+    const intro = document.getElementById("intro");
 
-    const envelope =
-        document.getElementById("envelope");
+    const main = document.getElementById("main");
 
-    const screen =
-        document.getElementById("envelopeScreen");
+    const music = document.getElementById("weddingMusic");
 
-    const music =
-        document.getElementById("music");
+    const musicButton = document.getElementById("musicButton");
 
-    envelope.classList.add("open");
+
+    let musicPlaying = false;
 
 
     /*
-      Музыка браузер уруксат бергенде
-      ушул жерден башталат.
+    =========================================
+    КОНВЕРТТИ БАСУУ
+    =========================================
     */
 
-    setTimeout(() => {
+    envelope.addEventListener("click", function () {
 
-        music.volume = 0.45;
+        /*
+        Бул click — телефондун колдонуучунун
+        аракетинен келип жаткандыктан,
+        браузер музыка ойнотууга уруксат берет.
+        */
 
-        music.play().catch(() => {
-            console.log(
-                "Музыка автоматтык ойнотулган жок."
-            );
-        });
+        music.volume = 0.55;
 
-    }, 500);
+        music.play()
+            .then(function () {
 
+                musicPlaying = true;
 
-    setTimeout(() => {
+                musicButton.innerHTML = "♫";
 
-        screen.classList.add("hide");
+            })
+            .catch(function (error) {
 
-        document.body.classList.remove("locked");
+                console.log(
+                    "Музыка автоматтык башталган жок:",
+                    error
+                );
 
-    }, 1100);
-
-}
-
-
-/* =====================================
-   МУЗЫКАНЫ ТОКТОТУУ / КОЮУ
-===================================== */
-
-function toggleMusic() {
-
-    const music =
-        document.getElementById("music");
-
-    const button =
-        document.getElementById("musicButton");
+            });
 
 
-    if (music.paused) {
+        /*
+        Конверт ачылат
+        */
 
-        music.play();
-
-        button.innerHTML = "♫";
-
-    } else {
-
-        music.pause();
-
-        button.innerHTML = "🔇";
-
-    }
-
-}
+        envelope.classList.add("open");
 
 
-/* =====================================
-   COUNTDOWN
-===================================== */
+        /*
+        Негизги сайт акырын көрүнөт
+        */
 
-const weddingDate =
-    new Date("September 26, 2026 17:00:00").getTime();
+        setTimeout(function () {
 
+            intro.classList.add("hide");
 
-function updateCountdown() {
+            main.classList.add("show");
 
-    const now =
-        new Date().getTime();
+            musicButton.classList.add("show");
 
-    const difference =
-        weddingDate - now;
+        }, 900);
 
-
-    if (difference <= 0) {
-
-        document.getElementById("days").innerHTML = "00";
-        document.getElementById("hours").innerHTML = "00";
-        document.getElementById("minutes").innerHTML = "00";
-        document.getElementById("seconds").innerHTML = "00";
-
-        return;
-
-    }
+    });
 
 
-    const days =
-        Math.floor(
-            difference /
-            (1000 * 60 * 60 * 24)
-        );
 
+    /*
+    =========================================
+    МУЗЫКАНЫ ТОКТОТУУ / КАЙРА КОШУУ
+    =========================================
+    */
 
-    const hours =
-        Math.floor(
-            (difference %
-            (1000 * 60 * 60 * 24)) /
-            (1000 * 60 * 60)
-        );
+    musicButton.addEventListener("click", function () {
 
+        if (musicPlaying) {
 
-    const minutes =
-        Math.floor(
-            (difference %
-            (1000 * 60 * 60)) /
-            (1000 * 60)
-        );
+            music.pause();
 
+            musicPlaying = false;
 
-    const seconds =
-        Math.floor(
-            (difference %
-            (1000 * 60)) /
-            1000
-        );
+            musicButton.innerHTML = "♪";
 
+        } else {
 
-    document.getElementById("days")
-        .innerHTML =
-        String(days).padStart(2, "0");
+            music.play()
+                .then(function () {
 
+                    musicPlaying = true;
 
-    document.getElementById("hours")
-        .innerHTML =
-        String(hours).padStart(2, "0");
+                    musicButton.innerHTML = "♫";
 
+                });
 
-    document.getElementById("minutes")
-        .innerHTML =
-        String(minutes).padStart(2, "0");
+        }
 
+    });
 
-    document.getElementById("seconds")
-        .innerHTML =
-        String(seconds).padStart(2, "0");
-
-}
-
-
-updateCountdown();
-
-setInterval(
-    updateCountdown,
-    1000
-);
 
 </script>
 
